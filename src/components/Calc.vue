@@ -10,6 +10,8 @@
             <button @click="sum = operand1 - operand2">-</button>
             <button v-on:click="sum = operand1 * operand2">*</button>
             <button @click="div">/</button>
+            <button @click="inv">^</button>
+            <button @click="mod">//</button>
             <button @click="eventFv">Event</button>
         </div>
       result : {{ sum }}
@@ -31,6 +33,12 @@ export default {
         },
         div(){
             this.sum = this.operand1 / this.operand2
+        },
+        inv(){
+            this.sum = this.operand1 ** this.operand2
+        },
+        mod(){
+            this.sum = parseInt(this.operand1/this.operand2);
         }
     },
 }

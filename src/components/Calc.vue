@@ -1,15 +1,17 @@
 <template>
   <div>
     <div>
+        <input type="radio" name="type" value=1 checked id="" v-model="opType">
         <input type="number" 
                placeholder="op1" 
                v-model.number="operand1"
         />
+        <input type="radio" name="type" value=2 id="" v-model="opType">
         <input placeholder="op2" 
                v-model.number="operand2" 
                type="number"
         />
-        = {{ result }} - {{ fibResult }}
+        <!-- = {{ operand1 }} - {{ operand2 }} -->
         </div>
         {{fio}}
         <div class="error" v-if="error">
@@ -28,6 +30,16 @@
               {{ idx }} - {{ item }}
             </div>
         </div>
+        <input type="checkbox"  v-model = "showKeys" id="showKeys"><label for="showKeys">Show keys</label>
+        <div class="numbers" v-if="showKeys">
+            <button v-for="num in collection" 
+                    :key="num"
+                    v-bind:title="num"
+                    @click="enter(num)"
+            >
+                    {{ num }}
+            </button>    
+        </div>
         <div class="buttons">
             <button v-for="btn in buttons" 
                     :key="btn"
@@ -40,15 +52,8 @@
         <div class="logs">
             {{ logs }}
         </div>
-        <div>
-            <!-- <button @click="calculate('+')">+</button>
-            <button @click="calculate('-')">-</button>
-            <button @click="calculate('*')">*</button>
-            <button @click="calculate('/')">/</button> -->
-            <!-- <button @click="eventFv">Event</button> -->
-        </div>
+        
       result : {{ result }}
-      <!-- <div v-on:mouseover=""></div> -->
   </div>
 </template>
 
@@ -65,20 +70,22 @@ export default {
         collection: [1,2,3,4,5,6,7,8,9,0],
         fibResult: 0,
         logs: {},
-        error: ""
+        error: "",
+        opType: "1",
+        showKeys: false,
     }),
     watch: {
-        result: function(newValue, oldValue){
-            console.log(newValue, oldValue)
-        },
-        fib1:function(newValue, oldValue){
-            console.log(newValue, oldValue)
-        },
-        logs:{
-            handler(){
-                console.log('deep')
-            }
-        }
+        // result: function(newValue, oldValue){
+        //     console.log(newValue, oldValue)
+        // },
+        // fib1:function(newValue, oldValue){
+        //     console.log(newValue, oldValue)
+        // },
+        // logs:{
+        //     handler(){
+        //         console.log('deep')
+        //     }
+        // }
     },
     methods: {
         // eventFv(){
@@ -86,6 +93,9 @@ export default {
         // },
         fib(n){
             return n <=1 ? n : this.fib(n-1) + this.fib(n-2)
+        },
+        enter(num){
+            this['operand' + this.opType] = "" + this['operand' + this.opType] + num; 
         },
         calculate(operation = '+'){
             this.error = ""
@@ -141,12 +151,12 @@ export default {
         fio(){
             return `${this.firstName} ${this.lastName}`
         },
-        fib1() {
-           return this.fib(this.operand1)
-        },
-        fib2() {
-            return this.fib(this.operand2)
-        }
+        // fib1() {
+        //    return this.fib(this.operand1)
+        // },
+        // fib2() {
+        //     return this.fib(this.operand2)
+        // }
     }
 }
 </script>

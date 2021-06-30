@@ -2,6 +2,7 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <Calc />
+
     <HelloWorld 
       msg="message" 
       :myArr= "arr"
@@ -35,5 +36,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.error {
+  color: green
 }
 </style>

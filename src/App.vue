@@ -1,43 +1,103 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <Calc />
-
-    <HelloWorld 
-      msg="message" 
-      :myArr= "arr"
-    />
-    Text : {{ message }} длина {{ message.length } }
+    <h1>My payment list</h1>
+    <AddPayment @addNewPayment="addNewPayment" />
+    <List :items="paymentsList" :page="currentPage"/>
+    <Pagination :count="Math.ceil(paymentsList.length / 5)" @changePage="changePage"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import Calc from './components/Calc.vue'
+import AddPayment from "./components/AddPayment.vue";
+import List from "./components/List.vue";
+import Pagination from "./components/Pagination.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-   HelloWorld,
-   Calc
+    AddPayment,
+    List,
+    Pagination,
   },
-  data: () =>({
-    message: "Ваша реклама12321",
-    arr: [1,2,3,4,5]
-  })
-}
+  data() {
+    return {
+      paymentsList: [],
+      currentPage: 1,
+    };
+  },
+
+  methods: {
+    addNewPayment(data) {
+      this.paymentsList = [...this.paymentsList, data];
+    },
+    changePage(page) {
+      this.currentPage = page;
+    },
+    fetchData() {
+      return [
+        {
+          date: "28.03.2020",
+          category: "1",
+          value: 169,
+        },
+        {
+          date: "24.03.2020",
+          category: "2",
+          value: 532,
+        },
+        {
+          date: "28.03.2020",
+          category: "3",
+          value: 169,
+        },
+        {
+          date: "24.03.2020",
+          category: "4",
+          value: 360,
+        },
+        {
+          date: "24.03.2020",
+          category: "5",
+          value: 532,
+        },
+        {
+          date: "28.03.2020",
+          category: "6",
+          value: 169,
+        },
+        {
+          date: "24.03.2020",
+          category: "7",
+          value: 360,
+        },
+        {
+          date: "24.03.2020",
+          category: "8",
+          value: 532,
+        },
+        {
+          date: "28.03.2020",
+          category: "9",
+          value: 169,
+        },
+        {
+          date: "24.03.2020",
+          category: "10",
+          value: 360,
+        },
+        {
+          date: "24.03.2020",
+          category: "11",
+          value: 532,
+        }
+      ];
+    },
+  },
+  created() {
+    this.paymentsList = this.fetchData();
+  },
+};
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-.error {
-  color: green
-}
 </style>

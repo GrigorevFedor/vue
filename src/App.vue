@@ -1,103 +1,80 @@
 <template>
-  <div id="app">
-    <h1>My payment list</h1>
-    <AddPayment @addNewPayment="addNewPayment" />
-    <List :items="paymentsList" :page="currentPage"/>
-    <Pagination :count="Math.ceil(paymentsList.length / 5)" @changePage="changePage"/>
+  <div id="app" :class="[$style.wrapper]">
+    <header>
+      <h1>My personal cost</h1>
+    </header>
+    <div class="menu">
+      <router-link to="/dashboard">Dashboard</router-link> /
+      <router-link to="/about">About</router-link> /
+      <router-link to="/notfound">Not found</router-link> /
+      <router-link to="/calc">Calc</router-link>
+    </div>
+
+    <test-vuex-component />
+    <main>
+      <div class="content-page">
+        <router-view />
+      </div>
+    
+    </main>
+    <transition name="fade">
+      <modal-window v-if="modalSettings.name" :settings="modalSettings"/>
+    </transition>
   </div>
 </template>
 
 <script>
-import AddPayment from "./components/AddPayment.vue";
-import List from "./components/List.vue";
-import Pagination from "./components/Pagination.vue";
-
+import TestVuexComponent from './components/TestVuexComponent.vue';
 export default {
+  components: { 
+    TestVuexComponent
+  },
   name: "App",
-  components: {
-    AddPayment,
-    List,
-    Pagination,
-  },
-  data() {
+  data(){
     return {
-      paymentsList: [],
-      currentPage: 1,
-    };
+      modalShown: false,
+      modalSettings: {}
+    }
   },
-
-  methods: {
-    addNewPayment(data) {
-      this.paymentsList = [...this.paymentsList, data];
+  methods:{
+    onShown(settings) {
+      this.modalSettings = settings
     },
-    changePage(page) {
-      this.currentPage = page;
-    },
-    fetchData() {
-      return [
-        {
-          date: "28.03.2020",
-          category: "1",
-          value: 169,
-        },
-        {
-          date: "24.03.2020",
-          category: "2",
-          value: 532,
-        },
-        {
-          date: "28.03.2020",
-          category: "3",
-          value: 169,
-        },
-        {
-          date: "24.03.2020",
-          category: "4",
-          value: 360,
-        },
-        {
-          date: "24.03.2020",
-          category: "5",
-          value: 532,
-        },
-        {
-          date: "28.03.2020",
-          category: "6",
-          value: 169,
-        },
-        {
-          date: "24.03.2020",
-          category: "7",
-          value: 360,
-        },
-        {
-          date: "24.03.2020",
-          category: "8",
-          value: 532,
-        },
-        {
-          date: "28.03.2020",
-          category: "9",
-          value: 169,
-        },
-        {
-          date: "24.03.2020",
-          category: "10",
-          value: 360,
-        },
-        {
-          date: "24.03.2020",
-          category: "11",
-          value: 532,
-        }
-      ];
-    },
+    onHide(){
+      this.modalSettings = {}
+    }
   },
-  created() {
-    this.paymentsList = this.fetchData();
+  mounted(){
+    this.$modal.EventBus.$on('shown', this.onShown)
+    this.$modal.EventBus.$on('hide', this.onHide)
   },
+  beforeDestroy(){
+    this.$modal.EventBus.$off('shown', this.onShown)
+    this.$modal.EventBus.$off('shown', this.onShown)
+  }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" module>
+html, body, .app {
+  width: 100%;
+  height: 100vh;
+}
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
+
+<style>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
 </style>

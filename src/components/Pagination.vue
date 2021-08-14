@@ -1,38 +1,48 @@
 <template>
-  <div class="pagination-wrp">
-    <div v-for="idx in count" :key="idx">
-         <button @click="changePage(idx)">{{idx}}</button>
-     </div>
+  <div :class="[$style.wrp]">
+    <div @click="onClick(cur - 1)">-</div>
+    <div
+      v-for="i in amount" :key="i"
+      :class="{
+        [$style.active]: cur === i
+      }"
+      @click="onClick(i)"
+    >{{ i }}</div>
+    <div @click="onClick(cur + 1)">+</div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Pagination",
-  data () {
-    return {
-    
-  }},
   props: {
-    count: {
-    type: Number,
-    default: ()=>0,
-  }
-,
-    
-},
-
+    length: Number,
+    n: Number,
+    cur: Number
+  },
+  computed: {
+    amount () {
+      return Math.ceil(this.length / this.n)
+    }
+  },
   methods: {
-      changePage(idx) {
-          this.$emit('changePage', idx);
+    onClick (p) {
+      if (p < 1 || p > this.amount || p === this.cur) {
+        return
       }
+      this.$emit('paginate', p)
+    }
   }
-};
+}
 </script>
 
-
-<style scoped lang="scss">
-    .pagination-wrp {
-        display: flex;
+<style module lang="scss">
+.wrp {
+  display: flex;
+  & > div {
+    padding: 10px;
+    &.active {
+      background: #ccc;
     }
+  }
+}
 </style>
